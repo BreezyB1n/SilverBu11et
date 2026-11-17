@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+const series = (await getCollection('series'))
+  .map((s) => ({ s, count: posts.filter((p) => p.data.series?.id === s.id).length }))
+  .filter((x) => x.count > 0);
+---
+
+<Base title="系列" description="SilverBu11et 的文章系列">
+  <div class="wrap section">
+    <header class="section-head">
+      <div>
+        <p class="kicker">关卡图</p>
+        <h1 class="px-48">系列</h1>
+      </div>
+    </header>
+    {
+      series.length === 0 ? (
+        <p class="pixel px-12 muted">还没有系列。</p>
+      ) : (
+        <ul class="series-grid">
+          {series.map(({ s, count }) => (
+            <li>
+              <a class="px-frame card" href={`/series/${s.id}/`}>
+                <span class="pixel px-24">{s.data.title}</span>
+                {s.data.description && <span class="desc">{s.data.description}</span>}
+                <span class="pixel px-12 muted">共 {count} 关 →</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  h1 {
+    margin: 0;
+  }
+  .series-grid {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    padding: 20px;
+  }
+  .card:hover {
+    transform: translate(-2px, -2px);
+  }
+  .desc {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+</style>

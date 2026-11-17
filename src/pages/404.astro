@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import PixelIcon from '../components/PixelIcon.astro';
+import { TRAVELER } from '../lib/sprites';
+---
+
+<Base title="迷路了">
+  <div class="wrap section lost">
+    <PixelIcon sprite={TRAVELER} scale={8} label="迷路的旅人" />
+    <p class="kicker">404</p>
+    <h1 class="px-36">这条路走不通</h1>
+    <p class="muted">你要找的页面不在地图上，可能已经搬走，也可能从未存在。</p>
+    <p class="actions">
+      <a class="px-btn" href="/">回营地</a>
+      <a class="px-btn" href="/posts/">看时间线</a>
+    </p>
+  </div>
+</Base>
+
+<style>
+  .lost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .lost :global(svg) {
+    margin-bottom: 24px;
+    transform: scaleX(-1);
+  }
+  h1 {
+    margin: 0 0 8px;
+  }
+  .actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 24px;
+  }
+</style>

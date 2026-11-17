@@ -1,0 +1,221 @@
+/* Long-form reading: body type stays plain and readable;
+   pixel touches live only in headings, rules, quotes and code frames. */
+.prose {
+  max-width: var(--measure);
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-top: 1.1em;
+}
+
+.prose p {
+  margin-block: 0;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  position: relative;
+  margin: 2.4em 0 0.8em;
+  color: var(--ink);
+}
+
+.prose h2 {
+  font-size: 24px;
+  line-height: 1.4;
+  padding-left: 22px;
+}
+
+.prose h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  box-shadow: 3px 3px 0 0 var(--shadow);
+}
+
+.prose h3 {
+  font-size: 24px;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+.prose h3::before {
+  content: '▸ ';
+  color: var(--accent);
+}
+
+.prose h4 {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.prose a {
+  color: var(--link);
+  background: linear-gradient(90deg, currentColor 50%, transparent 0) left bottom / 6px 2px repeat-x;
+  padding-bottom: 1px;
+}
+
+.prose a:hover {
+  color: var(--accent);
+}
+
+.prose strong {
+  color: var(--ink);
+  background: linear-gradient(transparent 62%, var(--mark) 62%);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.6em;
+}
+
+.prose li + li {
+  margin-top: 0.35em;
+}
+
+.prose ul > li {
+  list-style: none;
+  position: relative;
+}
+
+.prose ul > li::before {
+  content: '';
+  position: absolute;
+  left: -1.1em;
+  top: 0.8em;
+  width: 6px;
+  height: 6px;
+  background: var(--muted);
+}
+
+.prose ol > li::marker {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.prose blockquote {
+  margin-inline: 0;
+  padding: 0.6em 1.2em;
+  color: var(--ink-2);
+  background: var(--bg-2);
+  border-left: 6px solid transparent;
+  border-image: repeating-linear-gradient(var(--accent) 0 6px, transparent 6px 10px) 6;
+}
+
+.prose blockquote p + p {
+  margin-top: 0.8em;
+}
+
+.prose hr {
+  height: 6px;
+  border: 0;
+  margin: 3em auto;
+  max-width: 180px;
+  background:
+    linear-gradient(var(--muted) 0 0) center / 2px 6px no-repeat,
+    linear-gradient(var(--muted) 0 0) center / 6px 2px no-repeat,
+    repeating-linear-gradient(90deg, var(--muted) 0 2px, transparent 2px 10px) center / 100% 2px no-repeat;
+}
+
+.prose img {
+  margin-inline: auto;
+  border: var(--px) solid var(--line);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th,
+.prose td {
+  padding: 0.4em 0.8em;
+  border: 2px solid var(--line);
+  text-align: left;
+}
+
+.prose th {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  font-weight: 400;
+  background: var(--bg-3);
+  -webkit-font-smoothing: none;
+}
+
+/* Code */
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+.prose :not(pre) > code {
+  padding: 0.1em 0.4em;
+  background: var(--bg-2);
+  box-shadow: inset 0 -2px 0 0 var(--bg-3);
+}
+
+.prose pre {
+  position: relative;
+  margin-inline: 0;
+  padding: 1.1em 1.2em;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  background: var(--code-bg) !important;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--line),
+    0 var(--px) 0 0 var(--line),
+    calc(var(--px) * -1) 0 0 0 var(--line),
+    var(--px) 0 0 0 var(--line),
+    calc(var(--px) * 2) calc(var(--px) * 3) 0 0 var(--shadow);
+}
+
+.prose pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 8px;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--accent-ink);
+  background: var(--accent);
+  -webkit-font-smoothing: none;
+}
+
+/* Shiki dual themes */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+}
+
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+}
+
+/* KaTeX */
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.4em;
+}
+
+.prose .katex {
+  font-size: 1.05em;
+}

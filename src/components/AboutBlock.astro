@@ -1,0 +1,126 @@
+---
+import PixelIcon from './PixelIcon.astro';
+import { TRAVELER } from '../lib/sprites';
+import { SITE } from '../consts';
+
+interface Props {
+  heading?: 'h1' | 'h2';
+}
+const { heading: H = 'h2' } = Astro.props;
+
+// 【待填写】替换成你自己的信息
+const sheet = [
+  { k: '职业', v: '【待填写】' },
+  { k: '所在', v: '【待填写】' },
+  { k: '擅长', v: '【待填写】' },
+  { k: '最近在练', v: '【待填写】' },
+];
+---
+
+<div class="about">
+  <figure class="card px-frame">
+    <div class="avatar">
+      <PixelIcon sprite={TRAVELER} scale={10} label={`${SITE.author} 的像素化身`} />
+    </div>
+    <figcaption class="pixel">
+      <span class="name px-24">{SITE.author}</span>
+      <span class="px-12 muted">旅人 · 守火者</span>
+    </figcaption>
+    <dl class="sheet">
+      {
+        sheet.map((s) => (
+          <div>
+            <dt class="pixel px-12">{s.k}</dt>
+            <dd>{s.v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </figure>
+
+  <div class="bio">
+    <p class="kicker">关于 {SITE.author}</p>
+    <H class="px-36">在路上，也在写</H>
+    <p>
+      【待填写】这里写一段自我介绍：你在做什么，关心什么问题，为什么开这个博客。
+    </p>
+    <p>
+      【待填写】这里可以写你会在这里分享什么：技术文章里记录做过的东西和踩过的坑，感悟里记录路上想明白的事。
+    </p>
+    <p class="links pixel px-12">
+      <a class="px-link" href={SITE.github} rel="me noopener" target="_blank">GitHub</a>
+      <a class="px-link" href="/rss.xml">RSS 订阅</a>
+    </p>
+  </div>
+</div>
+
+<style>
+  .about {
+    display: grid;
+    gap: 48px;
+    align-items: start;
+  }
+  @media (min-width: 820px) {
+    .about {
+      grid-template-columns: 300px 1fr;
+      gap: 72px;
+    }
+  }
+  .card {
+    margin: 0;
+    padding: 24px;
+    max-width: 340px;
+  }
+  .avatar {
+    display: grid;
+    place-items: center;
+    padding: 20px 0 12px;
+    background:
+      linear-gradient(var(--bg-3) 0 0) bottom / 100% 14px no-repeat,
+      var(--bg);
+    box-shadow: inset 0 0 0 2px var(--line);
+  }
+  .avatar :global(svg) {
+    width: 160px;
+    height: auto;
+  }
+  figcaption {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 16px 0 8px;
+  }
+  .sheet {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  .sheet div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    border-top: 2px dashed var(--bg-3);
+  }
+  dt {
+    color: var(--muted);
+  }
+  dd {
+    margin: 0;
+    text-align: right;
+  }
+  .bio {
+    max-width: var(--measure);
+  }
+  .bio h1,
+  .bio h2 {
+    margin: 0 0 24px;
+  }
+  .bio p {
+    margin: 0 0 1em;
+  }
+  .links {
+    display: flex;
+    gap: 20px;
+    margin-top: 24px !important;
+  }
+</style>

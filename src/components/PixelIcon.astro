@@ -1,0 +1,26 @@
+---
+import { spriteRects, spriteSize, type Sprite } from '../lib/sprites';
+
+interface Props {
+  sprite: Sprite;
+  /** Size of one sprite pixel in CSS px. */
+  scale?: number;
+  label?: string;
+  class?: string;
+}
+
+const { sprite, scale = 2, label, class: className } = Astro.props;
+const { w, h } = spriteSize(sprite);
+---
+
+<svg
+  class:list={['pixel-icon', className]}
+  width={w * scale}
+  height={h * scale}
+  viewBox={`0 0 ${w} ${h}`}
+  shape-rendering="crispEdges"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  set:html={spriteRects(sprite)}
+/>

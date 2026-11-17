@@ -1,0 +1,44 @@
+---
+import PixelIcon from './PixelIcon.astro';
+import { CAMPFIRE } from '../lib/sprites';
+import { SITE } from '../consts';
+---
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <p class="pixel px-12">
+      <PixelIcon sprite={CAMPFIRE} scale={2} />
+      <span>© {new Date().getFullYear()} {SITE.name} · {SITE.author} 守着这堆火</span>
+    </p>
+    <p class="pixel px-12 links">
+      <a class="px-link" href="/rss.xml">RSS</a>
+      <a class="px-link" href={SITE.github} rel="me noopener" target="_blank">GitHub</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: 80px;
+    border-top: var(--px) solid var(--line);
+    background: var(--bg-2);
+    color: var(--ink-2);
+  }
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-block: 24px;
+  }
+  p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+  .links {
+    gap: 20px;
+  }
+</style>

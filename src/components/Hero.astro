@@ -1,0 +1,116 @@
+---
+import { SITE } from '../consts';
+---
+
+<section class="hero" aria-label="首页">
+  <div class="scene" aria-hidden="true">
+    <canvas data-scene></canvas>
+  </div>
+  <div class="hero-text wrap">
+    <p class="kicker hero-kicker">{SITE.author} 的营地</p>
+    <h1 class="title">{SITE.name}</h1>
+  </div>
+  <div class="hero-foot wrap">
+    <a href="#writing" class="pixel down">往下走 <span aria-hidden="true">↓</span></a>
+    <p class="motto">{SITE.motto}</p>
+  </div>
+</section>
+
+<script>
+  import { mountScene } from '../scripts/scene';
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-scene]');
+  if (canvas) mountScene(canvas);
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 520px;
+    max-height: 1100px;
+    overflow: hidden;
+    color: #fff4dc;
+    background: #2a2140;
+  }
+  :global(:root[data-theme='dark']) .hero {
+    background: #0a0c22;
+  }
+  .scene {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .scene canvas {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+  .hero-text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 34%;
+    text-shadow:
+      3px 3px 0 rgba(20, 14, 26, 0.8);
+  }
+  .hero-kicker {
+    color: #ffd25a;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+  }
+  .title {
+    margin: 0;
+    font-size: 48px;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+  }
+  @media (min-width: 720px) {
+    .title {
+      font-size: 96px;
+    }
+    .hero-kicker {
+      font-size: 24px;
+    }
+  }
+  .hero-foot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 24px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .down {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: #fff4dc;
+    text-shadow: 2px 2px 0 rgba(20, 14, 26, 0.8);
+  }
+  .down span {
+    display: inline-block;
+    animation: bob 1.2s steps(2) infinite;
+  }
+  .down:hover {
+    color: #ffd25a;
+  }
+  .motto {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 0.3em;
+    writing-mode: horizontal-tb;
+    text-shadow: 2px 2px 0 rgba(20, 14, 26, 0.8);
+  }
+  .motto::before {
+    content: '「';
+  }
+  .motto::after {
+    content: '」';
+  }
+  @keyframes bob {
+    50% {
+      transform: translateY(4px);
+    }
+  }
+</style>

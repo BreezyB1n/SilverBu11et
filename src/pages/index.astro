@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import AboutBlock from '../components/AboutBlock.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts';
+
+const posts = (await getPosts()).slice(0, 6);
+---
+
+<Base home>
+  <Hero />
+  <section id="about" class="section wrap">
+    <AboutBlock />
+  </section>
+  <section id="writing" class="section wrap">
+    <header class="section-head">
+      <div>
+        <p class="kicker">最近的足迹</p>
+        <h2 class="px-36">最新文章</h2>
+      </div>
+      <a href="/posts/" class="pixel px-12 px-link">全部文章 →</a>
+    </header>
+    <PostList posts={posts} />
+  </section>
+</Base>

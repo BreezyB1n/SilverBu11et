@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts, tagCounts, tagUrl } from '../../lib/posts';
+import { KINDS } from '../../consts';
+
+const posts = await getPosts();
+const tags = tagCounts(posts);
+---
+
+<Base title="标签" description="按主题浏览 SilverBu11et 的文章">
+  <div class="wrap section">
+    <header class="section-head">
+      <div>
+        <p class="kicker">行囊 · {tags.length} 个标签</p>
+        <h1 class="px-48">标签</h1>
+      </div>
+    </header>
+    <p class="pixel px-12 kinds">
+      主标签：
+      {KINDS.map((k) => <a class="px-link" href={`/posts/?kind=${encodeURIComponent(k)}`}>{k}</a>)}
+      · <a class="px-link" href="/series/">系列</a>
+    </p>
+    {
+      tags.length === 0 ? (
+        <p class="pixel px-12 muted">还没有标签。</p>
+      ) : (
+        <ul class="cloud">
+          {tags.map(([t, n]) => (
+            <li>
+              <a class="chip" href={tagUrl(t)}>
+                {t} <span class="muted">×{n}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  h1 {
+    margin: 0;
+  }
+  .kinds {
+    display: flex;
+    gap: 16px;
+    margin: 0 0 32px;
+  }
+  .cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cloud .chip {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+</style>

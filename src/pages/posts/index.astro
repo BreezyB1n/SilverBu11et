@@ -1,0 +1,87 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import PixelIcon from '../../components/PixelIcon.astro';
+import { LANTERN, HAMMER } from '../../lib/sprites';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+const years = [...new Set(posts.map((p) => p.data.date.getFullYear()))];
+const filters = [
+  { value: '', label: '全部' },
+  { value: '感悟', label: '感悟', icon: LANTERN },
+  { value: '技术', label: '技术', icon: HAMMER },
+];
+---
+
+<Base title="时间线" description="SilverBu11et 的全部文章">
+  <div class="wrap section">
+    <header class="section-head">
+      <div>
+        <p class="kicker">全部足迹 · {posts.length} 篇</p>
+        <h1 class="px-48">时间线</h1>
+      </div>
+      <div class="filters" role="group" aria-label="按主标签筛选">
+        {
+          filters.map((f) => (
+            <button class="px-btn" type="button" data-filter={f.value} aria-pressed={f.value === '' ? 'true' : 'false'}>
+              {f.icon && <PixelIcon sprite={f.icon} scale={2} />}
+              {f.label}
+            </button>
+          ))
+        }
+      </div>
+    </header>
+
+    {
+      years.map((y) => (
+        <section class="year" data-year>
+          <h2 class="year-label px-24">{y}</h2>
+          <PostList posts={posts.filter((p) => p.data.date.getFullYear() === y)} />
+        </section>
+      ))
+    }
+    {posts.length === 0 && <PostList posts={[]} />}
+  </div>
+</Base>
+
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  function apply(kind: string) {
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === kind)));
+    document.querySelectorAll<HTMLElement>('.item').forEach((el) => {
+      el.hidden = !!kind && el.dataset.kind !== kind;
+    });
+    document.querySelectorAll<HTMLElement>('[data-year]').forEach((sec) => {
+      sec.hidden = !sec.querySelector('.item:not([hidden])');
+    });
+    const url = new URL(location.href);
+    kind ? url.searchParams.set('kind', kind) : url.searchParams.delete('kind');
+    history.replaceState(null, '', url);
+  }
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter ?? '')));
+  const initial = new URL(location.href).searchParams.get('kind');
+  if (initial) apply(initial);
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  h1 {
+    margin: 0;
+  }
+  .year {
+    position: relative;
+    margin-top: 24px;
+  }
+  .year-label {
+    margin: 0;
+    color: var(--accent);
+  }
+  .section-head {
+    flex-wrap: wrap;
+  }
+</style>

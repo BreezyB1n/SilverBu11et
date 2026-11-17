@@ -1,0 +1,153 @@
+---
+import PixelIcon from './PixelIcon.astro';
+import { MAGNIFIER, SUN, MOON, CAMPFIRE } from '../lib/sprites';
+import { SITE } from '../consts';
+
+interface Props {
+  overlay?: boolean;
+}
+const { overlay = false } = Astro.props;
+const path = Astro.url.pathname;
+const links = [
+  { href: '/posts/', label: '文章' },
+  { href: '/tags/', label: '标签' },
+  { href: '/about/', label: '关于' },
+];
+---
+
+<header class:list={['nav', { overlay }]}>
+  <div class="wrap nav-inner">
+    <a href="/" class="brand pixel" aria-label={`${SITE.name} 首页`}>
+      <PixelIcon sprite={CAMPFIRE} scale={2} />
+      <span>{SITE.name}</span>
+    </a>
+    <nav aria-label="主导航">
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} class="pixel" aria-current={path.startsWith(l.href) ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <button class="icon-btn" type="button" data-open-search aria-label="搜索 (按 / 键)">
+            <PixelIcon sprite={MAGNIFIER} scale={2} />
+          </button>
+        </li>
+        <li>
+          <button class="icon-btn" type="button" data-theme-toggle aria-label="切换明暗">
+            <span class="sun"><PixelIcon sprite={SUN} scale={2} /></span>
+            <span class="moon"><PixelIcon sprite={MOON} scale={2} /></span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      (window as any).__setTheme(next);
+    }),
+  );
+</script>
+
+<style>
+  .nav {
+    position: relative;
+    z-index: 20;
+    border-bottom: var(--px) solid var(--line);
+    background: var(--bg);
+  }
+  .nav.overlay {
+    position: absolute;
+    inset: 0 0 auto;
+    background: transparent;
+    border-bottom: 0;
+    --sp-outline: #fff4dc;
+    color: #fff4dc;
+    text-shadow: 2px 2px 0 rgba(20, 14, 26, 0.75);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 64px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    line-height: 1;
+  }
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  nav a {
+    display: block;
+    padding: 6px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.15em;
+  }
+  nav a:hover,
+  nav a[aria-current='page'] {
+    color: var(--accent);
+  }
+  .overlay nav a:hover {
+    color: #ffd25a;
+  }
+  nav a[aria-current='page']::before {
+    content: '▸';
+  }
+  .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  .icon-btn:hover {
+    transform: translateY(-2px);
+  }
+  .icon-btn :global(svg) {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  .overlay .icon-btn :global(svg) {
+    filter: drop-shadow(2px 2px 0 rgba(20, 14, 26, 0.75));
+  }
+  .moon {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .moon {
+    display: block;
+  }
+  :global(:root[data-theme='dark']) .sun {
+    display: none;
+  }
+  @media (max-width: 520px) {
+    .brand span {
+      font-size: 12px;
+    }
+    nav a {
+      padding: 6px 6px;
+      letter-spacing: 0.05em;
+    }
+  }
+</style>

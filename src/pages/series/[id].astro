@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const series = await getCollection('series');
+  return series
+    .map((s) => ({
+      params: { id: s.id },
+      props: {
+        series: s,
+        posts: posts
+          .filter((p) => p.data.series?.id === s.id)
+          .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0)),
+      },
+    }))
+    .filter((x) => x.props.posts.length > 0);
+}
+
+const { series, posts } = Astro.props;
+---
+
+<Base title={`系列：${series.data.title}`} description={series.data.description}>
+  <div class="wrap section">
+    <header class="section-head">
+      <div>
+        <p class="kicker"><a href="/series/">系列</a> · 共 {posts.length} 关</p>
+        <h1 class="px-48">{series.data.title}</h1>
+        {series.data.description && <p class="desc">{series.data.description}</p>}
+      </div>
+    </header>
+    <PostList posts={posts} seriesMode />
+  </div>
+</Base>
+
+<style>
+  h1 {
+    margin: 0;
+  }
+  .desc {
+    margin: 8px 0 0;
+    color: var(--ink-2);
+  }
+</style>

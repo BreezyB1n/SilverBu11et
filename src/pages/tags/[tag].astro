@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts, tagCounts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return tagCounts(posts).map(([tag]) => ({
+    params: { tag },
+    props: { tag, posts: posts.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<Base title={`标签：${tag}`} description={`SilverBu11et 中标记为「${tag}」的文章`}>
+  <div class="wrap section">
+    <header class="section-head">
+      <div>
+        <p class="kicker"><a href="/tags/">标签</a> · {posts.length} 篇</p>
+        <h1 class="px-48">#{tag}</h1>
+      </div>
+    </header>
+    <PostList posts={posts} />
+  </div>
+</Base>
+
+<style>
+  h1 {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+</style>

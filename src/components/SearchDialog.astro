@@ -1,0 +1,92 @@
+---
+// Pagefind's index is generated after `astro build`, so search only works
+// on the built site (`pnpm build && pnpm preview`), not in `astro dev`.
+---
+
+<dialog class="search px-frame" aria-label="搜索文章">
+  <div class="search-head">
+    <p class="kicker">搜寻</p>
+    <button class="px-btn" type="button" data-close>ESC 关闭</button>
+  </div>
+  <div id="pagefind-search"></div>
+  <p class="search-note muted" hidden>搜索索引只在构建后的站点里生成（pnpm build && pnpm preview）。</p>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('dialog.search')!;
+  let loaded = false;
+
+  async function open() {
+    dialog.showModal();
+    if (loaded) {
+      dialog.querySelector<HTMLInputElement>('input')?.focus();
+      return;
+    }
+    loaded = true;
+    try {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = '/pagefind/pagefind-ui.css';
+      document.head.append(css);
+      const url = '/pagefind/pagefind-ui.js';
+      await import(/* @vite-ignore */ url);
+      // @ts-ignore provided by pagefind-ui.js
+      new PagefindUI({ element: '#pagefind-search', showSubResults: true, showImages: false, resetStyles: false });
+      dialog.querySelector<HTMLInputElement>('input')?.focus();
+    } catch {
+      dialog.querySelector<HTMLElement>('.search-note')!.hidden = false;
+    }
+  }
+
+  document.querySelectorAll('[data-open-search]').forEach((b) => b.addEventListener('click', open));
+  dialog.querySelector('[data-close]')!.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  document.addEventListener('keydown', (e) => {
+    const t = e.target as HTMLElement;
+    if (e.key === '/' && !dialog.open && !/INPUT|TEXTAREA/.test(t.tagName) && !t.isContentEditable) {
+      e.preventDefault();
+      open();
+    }
+  });
+</script>
+
+<style>
+  .search {
+    width: min(680px, calc(100vw - 40px));
+    max-height: min(80vh, 760px);
+    margin: 12vh auto auto;
+    padding: 20px 24px 24px;
+    color: var(--ink);
+    border: 0;
+    overflow: auto;
+  }
+  .search::backdrop {
+    background: rgba(10, 8, 20, 0.55);
+  }
+  .search-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .search :global(.pagefind-ui) {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--ink);
+    --pagefind-ui-background: var(--bg);
+    --pagefind-ui-border: var(--line);
+    --pagefind-ui-tag: var(--bg-3);
+    --pagefind-ui-border-width: 3px;
+    --pagefind-ui-border-radius: 0;
+    --pagefind-ui-font: var(--font-body);
+  }
+  .search :global(.pagefind-ui__result-link) {
+    color: var(--link);
+  }
+  .search :global(mark) {
+    background: var(--mark);
+    color: inherit;
+  }
+</style>

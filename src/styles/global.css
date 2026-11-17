@@ -1,0 +1,323 @@
+/* ───────────── Tokens ─────────────
+   宣纸 (light): rice-paper cream, ink outlines, cinnabar seal red.
+   夜城 (dark): night indigo, teal links, torch orange.            */
+:root {
+  --font-pixel: 'Fusion Pixel 12px Proportional SC', 'Zpix', monospace;
+  --font-body: 'LXGW WenKai Screen', 'Songti SC', 'Noto Serif SC', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --px: 3px; /* one "pixel" of UI chrome */
+  --wrap: 1080px;
+  --measure: 42rem;
+
+  color-scheme: light;
+  --bg: #f4eddc;
+  --bg-2: #ebe1c9;
+  --bg-3: #e0d3b5;
+  --ink: #2b2420;
+  --ink-2: #5b5047;
+  --muted: #8a7e70;
+  --line: #2b2420;
+  --shadow: rgba(43, 36, 32, 0.22);
+  --accent: #b5362a;
+  --accent-ink: #fff4e4;
+  --link: #a8331f;
+  --mark: #f2c46b;
+  --code-bg: #efe5cf;
+
+  --sp-outline: #2b2420;
+  --sp-cloak: #3b4a6b;
+  --sp-cloak-shade: #2a3450;
+  --sp-skin: #f0c69a;
+  --sp-scarf: #c2352a;
+  --sp-steel: #b7bac6;
+  --sp-wood: #7a4f2c;
+  --sp-boot: #2a2030;
+  --sp-flame-hi: #ffd25a;
+  --sp-flame: #ff9a3c;
+  --sp-ember: #e2532d;
+  --sp-paper: #f4eddc;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #11132a;
+  --bg-2: #181b38;
+  --bg-3: #20244a;
+  --ink: #e7e2d2;
+  --ink-2: #b9b5c9;
+  --muted: #7d7b9b;
+  --line: #e7e2d2;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --accent: #ff8a3d;
+  --accent-ink: #1a0f08;
+  --link: #5fe0c8;
+  --mark: #6a4a1c;
+  --code-bg: #0c0e22;
+
+  --sp-outline: #e7e2d2;
+  --sp-cloak: #4a5a86;
+  --sp-cloak-shade: #36426a;
+  --sp-steel: #c9ccd6;
+  --sp-wood: #a06b3a;
+  --sp-boot: #3a3050;
+  --sp-paper: #11132a;
+}
+
+/* ───────────── Base ───────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.85;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+main {
+  flex: 1;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+.pixel-icon,
+canvas {
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: var(--px) solid var(--accent);
+  outline-offset: var(--px);
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+@media (min-width: 720px) {
+  .wrap {
+    padding-inline: 32px;
+  }
+}
+
+/* Pixel type stays on its 12px grid so it renders crisp. */
+.pixel,
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  font-smooth: never;
+  letter-spacing: 0.02em;
+}
+
+.px-12 {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.px-24 {
+  font-size: 24px;
+  line-height: 1.4;
+}
+.px-36 {
+  font-size: 36px;
+  line-height: 1.3;
+}
+.px-48 {
+  font-size: 48px;
+  line-height: 1.2;
+}
+
+.kicker {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin: 0 0 8px;
+  -webkit-font-smoothing: none;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ───────────── Pixel chrome ───────────── */
+/* A box with notched corners, like an old game dialog. */
+.px-frame {
+  position: relative;
+  background: var(--bg-2);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--line),
+    0 var(--px) 0 0 var(--line),
+    calc(var(--px) * -1) 0 0 0 var(--line),
+    var(--px) 0 0 0 var(--line),
+    calc(var(--px) * 2) calc(var(--px) * 3) 0 0 var(--shadow),
+    calc(var(--px) * 3) calc(var(--px) * 2) 0 0 var(--shadow);
+}
+
+.px-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg-2);
+  border: 0;
+  cursor: pointer;
+  -webkit-font-smoothing: none;
+  box-shadow:
+    0 -2px 0 0 var(--line),
+    0 2px 0 0 var(--line),
+    -2px 0 0 0 var(--line),
+    2px 0 0 0 var(--line),
+    inset 0 -3px 0 0 var(--bg-3);
+  transition: transform 80ms steps(2);
+}
+
+.px-btn:hover {
+  background: var(--bg-3);
+}
+
+.px-btn:active {
+  transform: translateY(2px);
+}
+
+.px-btn[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow:
+    0 -2px 0 0 var(--line),
+    0 2px 0 0 var(--line),
+    -2px 0 0 0 var(--line),
+    2px 0 0 0 var(--line),
+    inset 0 3px 0 0 rgba(0, 0, 0, 0.18);
+}
+
+.chip {
+  display: inline-block;
+  padding: 0 6px;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--ink-2);
+  background: var(--bg-2);
+  box-shadow:
+    0 -1px 0 0 var(--muted),
+    0 1px 0 0 var(--muted),
+    -1px 0 0 0 var(--muted),
+    1px 0 0 0 var(--muted);
+  -webkit-font-smoothing: none;
+}
+
+a.chip:hover {
+  color: var(--accent);
+  box-shadow:
+    0 -1px 0 0 var(--accent),
+    0 1px 0 0 var(--accent),
+    -1px 0 0 0 var(--accent),
+    1px 0 0 0 var(--accent);
+}
+
+/* Dashed pixel underline. */
+.px-link {
+  color: var(--link);
+  background: linear-gradient(90deg, currentColor 50%, transparent 0) left bottom / 6px 2px repeat-x;
+  padding-bottom: 2px;
+}
+
+.px-link:hover {
+  background-size: 6px 3px;
+  color: var(--accent);
+}
+
+.section {
+  padding-block: 80px;
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 40px;
+  border-bottom: var(--px) solid var(--line);
+  padding-bottom: 16px;
+}
+
+.section-head h2 {
+  margin: 0;
+}
+
+/* Divider made of pixel diamonds. */
+.px-rule {
+  height: 6px;
+  border: 0;
+  margin: 48px auto;
+  max-width: 180px;
+  background:
+    linear-gradient(var(--muted) 0 0) center / 2px 6px no-repeat,
+    linear-gradient(var(--muted) 0 0) center / 6px 2px no-repeat,
+    repeating-linear-gradient(90deg, var(--muted) 0 2px, transparent 2px 10px) center / 100% 2px no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
