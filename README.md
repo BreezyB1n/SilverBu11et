@@ -53,18 +53,17 @@ src/
   styles/             全局样式与正文排版
 ```
 
-## 部署（Cloudflare Pages）
+## 部署（Cloudflare）
 
-Cloudflare Pages 连接本仓库，构建设置：
+站点以 Workers 静态资源的方式部署在 Cloudflare，配置在 `wrangler.jsonc`。
 
-| 项         | 值           |
-| ---------- | ------------ |
-| 框架预设   | Astro        |
-| 构建命令   | `pnpm build` |
-| 输出目录   | `dist`       |
-| 环境变量   | `NODE_VERSION=24` |
+线上地址：https://silverbu11et.silverbu11et.workers.dev
 
-之后每次推送到 `main` 都会自动构建发布。
+```bash
+pnpm deploy   # 构建并上传（需要先 npx wrangler login）
+```
+
+写完文章的流程：`git push` 保存源码，然后 `pnpm deploy` 发布。
 
 ## 字体
 
